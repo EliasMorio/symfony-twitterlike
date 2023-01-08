@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1>{{ tweet.author.username}}</h1>
+
+
+    <p>{{ tweet.body }}</p>
+
+    <p>{{ tweet.createdAt|date('d/m/Y') }}</p>
+
+
+{% endblock %}
+

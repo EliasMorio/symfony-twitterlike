@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TweetController!{% endblock %}
+
+{% block body %}
+    <!-- if connected -->
+    {% if app.user %}
+    <h1> Hello {{ app.user.username }} !</h1>
+    {%  else %}
+    <h1> Hello !</h1>
+    {% endif %}
+
+    <h2>TL</h2>
+    <a href="{{ path('create_tweet') }}">Create a tweet</a>
+    <ul>
+        {% for tweet in tweets %}
+            <a href="{{ path('app_tweet_show', {'id': tweet.id}) }}">
+                <h2>{{ tweet.author.username }}</h2>
+                <!--convert date to string-->
+                <p>{{ tweet.createdAt|date('d/m/Y H:i:s') }}</p>
+                <p>{{ tweet.body }}</p>
+            </a>
+            <p>{{ tweet.likes|length }}</p>
+            <a href="{{ path('tweet_like', {'id': tweet.id}) }}">Like</a>
+            <hr>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

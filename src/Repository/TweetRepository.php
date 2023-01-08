@@ -63,4 +63,13 @@ class TweetRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findAllOrderedByDate(): array
+    {
+        return $this->createQueryBuilder('t')
+            ->orderBy('t.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

@@ -32,6 +32,27 @@ class Tweet
     private $author;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
      * @ORM\ManyToMany(targetEntity=User::class)
      * @ORM\JoinTable(name="twt_tweet_likes")
      */
