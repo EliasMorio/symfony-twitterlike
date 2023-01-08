@@ -21,7 +21,9 @@
                 <p>{{ tweet.body }}</p>
             </a>
             <p>{{ tweet.likes|length }}</p>
-            <a href="{{ path('tweet_like', {'id': tweet.id}) }}">Like</a>
+            {% if app.user %}
+                <a href="{{ path('tweet_like', {'id': tweet.id}) }}">Like</a>
+            {% endif %}
             <hr>
         {% endfor %}
     </ul>
