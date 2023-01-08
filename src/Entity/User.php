@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="twt_user")
  * @method string getUserIdentifier()
  * @uniqueEntity(fields={"username"}, message="Le nom d'utilisateur est déjà utilisé")
  */
@@ -43,6 +46,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
      * @Assert\EqualTo(propertyPath="confirmPassword", message="Les mots de passe ne correspondent pas.")
      */
     private $confirmPassword;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Tweet::class, mappedBy="author", orphanRemoval=true)
+     */
+    private $tweets;
+
+    public function __construct()
+    {
+        $this->tweets = new ArrayCollection();
+    }
 
     /**
      * @return mixed
@@ -104,5 +117,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     public function eraseCredentials()
     {
         // TODO: Implement eraseCredentials() method.
+    }
+
+    /**
+     * @return Collection<int, Tweet>
+     */
+    public function getTweets(): Collection
+    {
+        return $this->tweets;
+    }
+
+    public function addTweet(Tweet $tweet): self
+    {
+        if (!$this->tweets->contains($tweet)) {
+            $this->tweets[] = $tweet;
+            $tweet->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTweet(Tweet $tweet): self
+    {
+        if ($this->tweets->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getAuthor() === $this) {
+                $tweet->setAuthor(null);
+            }
+        }
+
+        return $this;
     }
 }
